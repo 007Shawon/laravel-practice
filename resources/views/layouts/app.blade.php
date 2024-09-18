@@ -8,6 +8,16 @@
 </head>
 <body>
     <div>
+        @if(session('status'))
+        <div style = "background: pink; color:cornflowerblue">
+            {{ session('status') }}
+        </div>
+        @endif
+        {{-- @if(session('status'))
+            <div style="background: pink; color:blue">
+                {{ session('status') }}
+            </div>
+        @endif --}}
         @yield('content')
     </div>
 </body>

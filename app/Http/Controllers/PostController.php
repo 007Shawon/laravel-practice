@@ -2,46 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePost;
+use App\Models\BlogPost;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    private  $posts = [
-
-        1 => [
-            'title'=> 'Intro to Laravel',
-            'content'=> 'This is a short intro to Laravel',
-            'is_new'=> true,
-            'has_comments' => true
-
-        ],
-        2 => [
-            'title'=> 'Intro to PHP',
-            'content'=> 'This is a short intro to PHP',
-            'is_new'=> false
-        ],
-        3 => [
-            'title'=> 'Intro to JavaScript',
-            'content'=> 'This is a short intro to JavaScript',
-            'is_new'=> true,
-           
-
-        ],
-        4=> [
-            'title'=> 'Intro to Vue.js',
-            'content'=> 'This is a short intro to Vue.js',
-            'is_new'=> false,
-            'has_comments' => true
-
-        ],
-    ]; 
+     
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-        return view('posts.index',['posts' => $this->posts]);
+        //return view('posts.index',['posts' => BlogPost::orderBy('created_at','desc')->take(4)->get()]);
+        return view('posts.index',['posts' => BlogPost::all()]);
     }
 
     /**
@@ -49,15 +23,21 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(StorePost $request)
+    {   
+        $validated = $request->validated();
+        $post = BlogPost::create($validated);
+
+        $request->session()->flash('status','The post is successfully created!');
+
+        return redirect()->route('posts.show', ['post' => $post->id]);
+
     }
 
     /**
@@ -65,25 +45,32 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
-        abort_if(!isset($this->posts[$id]), 404);
-        return view('posts.show',['post' =>$this->posts[$id]]);
+        //abort_if(!isset($this->posts[$id]), 404);
+        return view('posts.show',['post' =>BlogPost::findOrFail($id)]);
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        
+        return view('posts.edit', ['post'=>  BlogPost::findOrFail($id)]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StorePost $request, $id)
     {
-        //
+        $post = BlogPost::findOrFail($id);
+        $validated = $request->validated();
+        $post->fill($validated);
+        $post->save();
+
+        $request->session()->flash('status','Blog post is updated!');
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
     /**
@@ -91,6 +78,10 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       $post = BlogPost::findorFail($id);
+       $post->delete();
+
+       session()->flash('status','Blog post is deleted!');
+       return redirect()->route('posts.index');
     }
 }
