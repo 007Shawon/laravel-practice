@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('title');   // Ensure this line exists
-            $table->text('content');   // Ensure this line exists
+            $table->string('title')->default('');   // Ensure this line exists
+            $table->text('content')->default('');   // Ensure this line exists
         });
     }
 
