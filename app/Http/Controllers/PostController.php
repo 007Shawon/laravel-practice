@@ -55,7 +55,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        dd("test");
+
 
         return view('posts.edit', ['post'=>  BlogPost::findOrFail($id)]);
     }
