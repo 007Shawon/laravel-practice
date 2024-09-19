@@ -26,4 +26,14 @@ class StorePost extends FormRequest
             'content' =>'required|min:10'
         ];
     }
+    public function messages()
+    {
+        return [
+            'title.required' => 'The title field is required.',
+            'title.min' => 'The title must be at least 5 characters.',
+            'title.max' => 'The title may not be greater than 10 characters.',
+            'content.required' => 'The content field is required.',
+            'content.min' => 'The content must be at least 10 characters.'
+        ];
+    }
 }

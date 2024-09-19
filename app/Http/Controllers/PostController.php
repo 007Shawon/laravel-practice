@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-     
+
     /**
      * Display a listing of the resource.
      */
@@ -30,7 +30,7 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StorePost $request)
-    {   
+    {
         $validated = $request->validated();
         $post = BlogPost::create($validated);
 
@@ -55,7 +55,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        
+        dd("test");
+
         return view('posts.edit', ['post'=>  BlogPost::findOrFail($id)]);
     }
 
